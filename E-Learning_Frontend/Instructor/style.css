@@ -1,0 +1,714 @@
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif;
+}
+
+body {
+    height: 100vh;
+    overflow: hidden;
+}
+
+/* ===== Layout ===== */
+.app {
+    height: 100vh;
+    display: grid;
+    grid-template-columns: 260px 1fr;
+}
+
+/* ===== Sidebar ===== */
+.sidebar {
+    background: linear-gradient(180deg, #0d6efd, #0649b9);
+    padding: 18px 14px;
+    display: flex;
+    flex-direction: column;
+    color: white;
+}
+
+.brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 10px 10px 18px;
+    font-weight: 700;
+    font-size: 18px;
+    letter-spacing: 0.2px;
+}
+
+.brand i {
+    font-size: 20px;
+}
+
+.nav {
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    margin-top: 8px;
+}
+
+.nav-btn {
+    width: 100%;
+    border: none;
+    background: transparent;
+    color: rgba(255, 255, 255, 0.92);
+    padding: 12px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 14px;
+    text-align: left;
+    transition: 0.2s;
+}
+
+.nav-btn i {
+    font-size: 16px;
+}
+
+.nav-btn:hover {
+    background: rgba(255, 255, 255, 0.14);
+}
+
+.nav-btn.active {
+    background: rgba(255, 255, 255, 0.22);
+    font-weight: 700;
+}
+
+.logout-wrap {
+    margin-top: auto;
+    padding-top: 14px;
+}
+
+.logout-btn {
+    width: 100%;
+    border: none;
+    background: #dc3545;
+    color: white;
+    padding: 12px 12px;
+    border-radius: 10px;
+    cursor: pointer;
+    font-weight: 700;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    transition: 0.2s;
+}
+
+.logout-btn:hover {
+    filter: brightness(0.95);
+}
+
+/* ===== Main Area ===== */
+.main {
+    background: radial-gradient(circle at top left, #e9f4ff, #f7fbff);
+    padding: 18px;
+    overflow: auto;
+}
+
+/* Topbar */
+.topbar {
+    background: white;
+    border-radius: 10px;
+    padding: 12px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    box-shadow: 0 6px 18px rgba(0,0,0,0.06);
+}
+
+.page-title {
+    font-weight: 700;
+    color: #0b2b55;
+}
+
+.user-email {
+    font-size: 13px;
+    color: #6b7280;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.user-email i {
+    color: #0d6efd;
+}
+
+/* ===== Content area ===== */
+.content {
+  margin-top: 18px;
+  min-height: calc(100vh - 90px);
+  padding: 18px 24px;
+}
+
+/*Center only dashboard*/
+#dashboard {
+  min-height: calc(100vh - 140px);
+  display: grid;
+  place-items: center;
+}
+
+/* Welcome Card */
+.welcome-card {
+    width: min(520px, 92%);
+    background: white;
+    border-radius: 14px;
+    padding: 28px;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.welcome-card h2 {
+    font-size: 20px;
+    color: #0b2b55;
+    margin-bottom: 8px;
+}
+
+.welcome-card p {
+    font-size: 14px;
+    color: #6b7280;
+    margin-bottom: 18px;
+}
+
+.actions {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.app-btn {
+    border: 1px solid #dbe3ef;
+    padding: 10px 14px;
+    border-radius: 10px;
+    cursor: pointer;
+    background: white;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    transition: 0.2s;
+    justify-content: center;
+}
+
+.app-btn.primary {
+    background: #0d6efd;
+    border-color: #0d6efd;
+    color: white;
+}
+
+.app-btn:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 18px rgba(0,0,0,0.08);
+}
+
+/* ===== Page sections (JS will show/hide) ===== */
+.page {
+    display: none;
+    width: 100%;
+}
+
+.page.active {
+    display: grid;
+    place-items: center;
+}
+
+/* Example content cards */
+.simple-card {
+    width: min(700px, 92%);
+    background: white;
+    border-radius: 14px;
+    padding: 22px;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+}
+
+.simple-card h3 {
+    margin-bottom: 10px;
+    color: #0b2b55;
+}
+
+.simple-card p {
+    color: #6b7280;
+    line-height: 1.6;
+}
+
+/* ===== Account Settings Page ===== */
+.settings-wrap {
+  width: 100%;
+  max-width: 1100px;
+  margin: 0 auto;
+}
+
+.settings-header {
+  width: min(1100px, 96%);
+  margin: 0 auto 16px auto;
+}
+
+.settings-header h2 {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 22px;
+  font-weight: 800;
+  color: #0b2b55;
+  margin-bottom: 6px;
+}
+
+.settings-header p {
+  margin: 0;
+  color: #6b7280;
+}
+
+.settings-grid {
+  width: min(1100px, 96%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 18px;
+}
+
+.card-heading {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0b2b55;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+/* Disabled inputs look nicer */
+input:disabled {
+  background: #f3f6fb !important;
+  cursor: not-allowed;
+  opacity: 1;
+}
+
+/* Locked button style */
+.locked-btn {
+  background: #eef2f7;
+  border: 1px solid #dbe3ef;
+  color: #6b7280;
+  font-weight: 700;
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+  .settings-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+/*-----------MY COURSES------------*/
+.page-header {
+  margin-bottom: 18px;
+}
+
+.page-heading {
+  font-size: 22px;
+  font-weight: 800;
+  color: #0f172a;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.page-heading i {
+  color: #0d6efd;
+  font-size: 22px;
+}
+
+.page-header-row{
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 16px;
+}
+
+.page-subtitle {
+  margin: 6px 0 0;
+  color: #64748b;
+  font-size: 14px;
+}
+
+/* Courses grid */
+.courses-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(240px, 1fr));
+  gap: 18px;
+}
+
+/* Responsive */
+@media (max-width: 1100px) {
+  .courses-grid {
+    grid-template-columns: repeat(2, minmax(240px, 1fr));
+  }
+}
+
+@media (max-width: 750px) {
+  .courses-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+@media (max-width: 700px){
+  .page-header-row{
+    flex-direction: column;
+    align-items: stretch;
+  }
+}
+
+/* Course card */
+.course-card {
+  background: white;
+  border-radius: 18px;
+  padding: 18px;
+  border: 1px solid rgba(15, 23, 42, 0.06);
+  box-shadow: 0 10px 25px rgba(0,0,0,0.06);
+
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.course-title {
+  font-size: 16px;
+  font-weight: 800;
+  color: #0f172a;
+  margin: 0;
+}
+
+.course-desc {
+  margin: 0;
+  font-size: 13px;
+  color: #64748b;
+  line-height: 1.4;
+  min-height: 38px;
+}
+
+.course-footer {
+  margin-top: auto;
+}
+
+/*-----------MANAGE SESSIONS------------*/
+/* ===== Sessions Page ===== */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.table-card {
+  background: white;
+  border-radius: 16px;
+  padding: 14px;
+  box-shadow: 0 14px 30px rgba(15, 23, 42, 0.08);
+  border: 1px solid #eef2f7;
+}
+
+.sessions-table {
+  width: 100%;
+  border-collapse: collapse;
+  overflow: hidden;
+}
+
+.sessions-table thead th {
+  text-align: left;
+  font-size: 13px;
+  font-weight: 800;
+  color: #0f172a;
+  padding: 12px 12px;
+  border-bottom: 1px solid #e8eef7;
+}
+
+.sessions-table tbody td {
+  padding: 12px 12px;
+  font-size: 14px;
+  color: #0f172a;
+  border-bottom: 1px solid #f1f5f9;
+  vertical-align: middle;
+}
+
+.sessions-table tbody tr:hover {
+  background: #f8fbff;
+}
+
+/* Preview buttons */
+.action-btn {
+  border: 1px solid #dbe3ef;
+  padding: 7px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: white;
+  font-weight: 700;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  transition: 0.15s;
+  font-size: 13px;
+}
+
+.action-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
+}
+
+.action-btn.video i {
+  color: #0d6efd;
+}
+
+.action-btn.pdf i {
+  color: #16a34a;
+}
+
+/* Actions group */
+.session-actions {
+  display: flex;
+  gap: 10px;
+  justify-content: flex-start;
+  flex-wrap: wrap;
+}
+
+/* Small action buttons */
+.mini-btn {
+  border: 1px solid #dbe3ef;
+  padding: 6px 10px;
+  border-radius: 10px;
+  cursor: pointer;
+  background: white;
+  font-weight: 800;
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  transition: 0.15s;
+  font-size: 13px;
+}
+
+.mini-btn:hover {
+  transform: translateY(-1px);
+  box-shadow: 0 10px 18px rgba(0, 0, 0, 0.08);
+}
+
+.mini-btn.edit i {
+  color: #0d6efd;
+}
+
+.mini-btn.exercise i {
+  color: #16a34a;
+}
+
+.mini-btn.delete {
+  border-color: #fecaca;
+}
+
+.mini-btn.delete i {
+  color: #dc2626;
+}
+
+/*------------ADDING NEW SESSION----------------*/
+.form-group {
+  margin-bottom: 18px; 
+}
+
+.form-label {
+  display: block;
+  font-weight: 700;
+  color: #0f172a;
+  margin-bottom: 8px; 
+  font-size: 14px;
+}
+
+.form-control {
+  padding: 12px 14px;
+  border-radius: 12px;
+  border: 1px solid #dbe3ef;
+  width: 100%;
+}
+
+.add-session-btn {
+  margin-top: 8px;
+  padding: 14px 16px;
+  border-radius: 14px;
+  font-size: 15px;
+}
+
+.preview-area {
+  margin-top: 18px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+}
+
+.preview-box {
+  background: #f8fbff;
+  border: 1px solid #d9e6ff;
+  border-radius: 14px;
+  padding: 12px;
+}
+
+.preview-title {
+  font-weight: 700;
+  margin-bottom: 10px;
+  color: #0b2a55;
+}
+
+.empty-preview {
+  color: #6b7280;
+  font-size: 14px;
+}
+
+#videoPreview {
+  width: 100%;
+  height: 220px;
+  border-radius: 12px;
+  background: #000;
+}
+
+/*--------------------ADDING EXERCISES----------------------*/
+.excel-actions {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-bottom: 10px;
+}
+
+/* File input */
+.excel-actions input[type="file"] {
+  flex: 1;
+  min-width: 260px;
+  padding: 10px 12px;
+  border: 1px solid #dbe3ef;
+  border-radius: 12px;
+  background: #fff;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+/* Hint text under buttons */
+.hint-text {
+  font-size: 13px;
+  color: #64748b;
+  margin-top: 6px;
+  line-height: 1.4;
+}
+
+/* Result alert after import */
+.alert-success {
+  background: #ecfdf5;
+  border: 1px solid #a7f3d0;
+  color: #065f46;
+  padding: 12px 14px;
+  border-radius: 12px;
+  font-size: 14px;
+  font-weight: 600;
+}
+
+/* Optional: make the buttons equal height */
+.excel-actions .app-btn {
+  height: 42px;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 14px;
+  border-radius: 12px;
+}
+
+.search-box {
+    position: relative;
+    max-width: 400px;
+    margin-bottom: 15px;
+}
+
+.suggestions-box {
+    position: absolute;
+    width: 100%;
+    background: #fff;
+    border: 1px solid #eee;
+    border-radius: 8px;
+    top: 100%;
+    left: 0;
+    z-index: 10;
+    display: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.suggestion-item {
+    padding: 10px;
+    cursor: pointer;
+}
+
+.suggestion-item:hover {
+    background: #f5f5f5;
+}
+
+/* Average rating section */
+#avgRating {
+    margin-bottom: 20px;
+    padding-bottom: 12px;
+    border-bottom: 1px solid #eee;
+}
+
+/* Each feedback item */
+.feedback-item {
+    padding: 16px 0;
+    border-bottom: 1px solid #eee;
+}
+
+/* Space stars and text */
+.feedback-item > div {
+    margin-bottom: 6px;
+}
+
+/* Comment text */
+.feedback-item p {
+    margin: 6px 0 8px;
+    font-size: 0.95rem;
+    color: #444;
+}
+
+/* Author */
+.feedback-item small {
+    color: #888;
+    font-size: 0.85rem;
+}
+
+/* Optional hover effect (nice UX) */
+.feedback-item:hover {
+    background: #fafafa;
+    border-radius: 6px;
+    padding-left: 8px;
+}
+
+.pagination {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+}
+
+.page-btn {
+    border: none;
+    background: #f3f4f6;
+    padding: 6px 10px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
+.page-btn:hover {
+    background: #e5e7eb;
+}
+
+.page-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+
+.page-info {
+    font-size: 0.9rem;
+    color: #555;
+}
+
