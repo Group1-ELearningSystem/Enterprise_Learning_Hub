@@ -13,14 +13,13 @@ const courses = JSON.parse(localStorage.getItem("courses"))
 
 const loginUser = JSON.parse(localStorage.getItem("loginUser"))
 const employee = JSON.parse(localStorage.getItem("employees")) || [];
-const employeeDetail = employee.find(e => e.accountId === loginUser.id);
 
-userEmail.textContent = employeeDetail.email
+userEmail.textContent = loginUser.email
 
 if(!loginUser){
     window.location.href = "../../General/pages/login.html"
 }
-if(loginUser.role !== "Employee" || loginUser.verified === false) {
+if(loginUser.Account_Roles !== "Employee" || loginUser.Account_Status !== "Active") {
     alert("Access denied!")
     window.location.href = "../../General/pages/login.html"
 }
