@@ -1,4 +1,4 @@
-import { courseRender, LoadCourseToForm } from "./courses.js"
+import { courseRender, LoadCourseToForm, openEditCourse, setupAddingEmployeeCourses } from "./courses.js"
 import { renderInstructor, setupAddingInstructor, setupEdittingInstructor } from "./instructors.js"
 import { renderEmployee, setupAddingEmployee,setupEdittingEmployee } from "./employees.js"
 import { renderRequests, applyFilter, setupEdittingRequest } from "./requests.js"
@@ -8,18 +8,14 @@ const pageContainer = document.getElementById("pageContainer")
 const pageTitle = document.getElementById("pageTitle")
 const logoutBtn = document.getElementById("logoutBtn")
 const userEmail = document.getElementById("userEmail")
-
-const courses = JSON.parse(localStorage.getItem("courses"))
-
 const loginUser = JSON.parse(localStorage.getItem("loginUser"))
-const employee = JSON.parse(localStorage.getItem("employees")) || [];
 
 userEmail.textContent = loginUser.email
 
 if(!loginUser){
     window.location.href = "../../General/pages/login.html"
 }
-if(loginUser.Account_Roles !== "Employee" || loginUser.Account_Status !== "Active") {
+if(loginUser.Account_Roles !== 'Employee' || loginUser.Account_Status !== 'Active') {
     alert("Access denied!")
     window.location.href = "../../General/pages/login.html"
 }
@@ -57,12 +53,16 @@ export async function loadPage(pageName){
         pageTitle.textContent = titleMap[pageName] || "Dashboard";
 
         if(pageName === "courses"){
-            courseRender(courses);
+            courseRender();
+        }
+
+        if(pageName === "add_courses"){
+            setupAddingEmployeeCourses()
         }
 
         if(pageName === "editting_courses"){
             const selectedCourseId = JSON.parse(localStorage.getItem("selectedCourseId"))
-            LoadCourseToForm(selectedCourseId)
+            openEditCourse(selectedCourseId)
         }
 
         if(pageName === "instructors"){

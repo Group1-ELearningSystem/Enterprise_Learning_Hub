@@ -18,7 +18,7 @@ console.log(loginUser)
 if(!loginUser){
     window.location.href = "../../General/pages/login.html"
 }
-if(loginUser.Account_Roles !== "Instructor" || loginUser.Account_Status === false) {
+if(loginUser.Account_Roles !== "Instructor" || loginUser.Account_Status !== "Active") {
     alert("Access denied!")
     window.location.href = "../../General/pages/login.html"
 }
