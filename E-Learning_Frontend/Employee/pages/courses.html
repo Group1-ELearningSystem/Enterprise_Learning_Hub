@@ -5,15 +5,17 @@
     </div>
 
     <div class="header-actions">
-        <div class="search-box">
+        <div class="search-wrapper">
             <i class="bi bi-search"></i>
-            <input type="text" id="searchInput" placeholder="Search courses...">
+            <input type="text" id="courseSearch" placeholder="Search courses...">
+            <div id="suggestions"></div>
         </div>
 
-        <button class="add-course-btn">
+        <button class="add-course-btn" id="addCourseBtn">
             <i class="bi bi-plus-circle"></i> Add Course
         </button>
     </div>
 </div>
 
 <div id="courseGrid" class="courses-grid"></div>
+<div id="pagination" class="pagination"></div>

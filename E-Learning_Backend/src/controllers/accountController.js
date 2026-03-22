@@ -1,13 +1,27 @@
 import { changePassword, login } from "../services/accountService.js";
 import { register } from "../services/accountService.js";
 import { verifyCode } from "../services/accountService.js";
+import jwt from "jsonwebtoken"
 
 export async function loginController(req, res) {
     const {email, password} = req.body
     
     try{
         const user = await login(email,password);
-        res.json({success:true, user});
+        const token = jwt.sign(
+            {
+                id: user.Account_ID,
+                role: user.Account_Roles, 
+                Instructor_ID: user.Instructor_ID
+            },
+            process.env.JWT_SECRET,
+            { expiresIn: "1d" }
+        );
+        res.json({
+            success: true,
+            token,
+            user
+        });
     }catch(err){
         console.log(err)
         if(err.message === "EMAIL_NOT_FOUND"){

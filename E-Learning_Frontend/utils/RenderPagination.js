@@ -1,22 +1,29 @@
 let currentPage = 1;
 
-export function renderPagination(courseId, page) {
+export function renderPagination(page, callback) {
+    currentPage = page
     const container = document.getElementById("pagination")
 
-    container.innerHTML = 
-    `
+    container.innerHTML =
+        `
         <button class="page-btn" ${page === 1 ? "disabled" : ""} id="prevPage">←</button>
         <span class="page-info">Page ${page}</span>
         <button class="page-btn" id="nextPage">→</button>
     `
 
     document.getElementById("prevPage")?.addEventListener("click", () => {
-        currentPage--
-        loadFeedbacks(courseId, currentPage)
+        if (currentPage > 1) {
+            currentPage--;
+            callback(
+                currentPage
+            );
+        }
     })
 
     document.getElementById("nextPage")?.addEventListener("click", () => {
         currentPage++
-        loadFeedbacks(courseId, currentPage)
+        callback(
+            currentPage
+        );
     })
 }

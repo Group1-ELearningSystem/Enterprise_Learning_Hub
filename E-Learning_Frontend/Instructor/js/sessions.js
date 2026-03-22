@@ -12,7 +12,10 @@ export async function renderSessions() {
     if (!text) return;
     text.textContent = course ? `Sessions for course: ${course.title}` : "No course selected";
 
-    const res = await api.get(`/courses/${course.id}/sessions`)
+    const token = localStorage.getItem("token")
+    const res = await api.get(`/courses/${course.id}/sessions`,{
+        headers: { Authorization: `Bearer ${token}` }
+    })
     const sessions = await res.data || [];
 
     sessionsBody.innerHTML = sessions.map((s, index) =>
@@ -96,7 +99,10 @@ export async function renderSessions() {
             if (!ok) return
 
             try {
-                await api.delete(`/courses/${courseId}/sessions/${sessionId}`)
+                const token = localStorage.getItem("token")
+                await api.delete(`/courses/${courseId}/sessions/${sessionId}`,{
+                    headers: { Authorization: `Bearer ${token}` }
+                })
                 alert("Session deleted successfully")
                 loadPage("sessions")
             } catch (err) {
@@ -173,9 +179,12 @@ export function setupAddingSession() {
         formData.append("pdf", pdfFile)
 
         try {
+            const token = localStorage.getItem("token")
             await api.post(`/courses/${course.id}/sessions`, formData, {
                 headers: {
+                    Authorization: `Bearer ${token}`,
                     "Content-Type": "multipart/form-data"
+                    
                 }
             })
             alert("Session added successfully")
@@ -239,9 +248,11 @@ export function setupEditSession() {
         }
 
         try {
+            const token = localStorage.getItem("token")
             await api.put(`/courses/${session.courseId}/sessions/${session.sessionId}`, formData,
                 {
                     headers: {
+                        Authorization: `Bearer ${token}`,
                         "Content-Type": "multipart/form-data"
                     }
                 }

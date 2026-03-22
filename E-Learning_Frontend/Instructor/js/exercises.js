@@ -12,7 +12,10 @@ export async function renderExercise() {
 
     text.textContent = `Exercises for Session ${session.sessionNo} of (${course.title})`;
 
-    const res = await api.get(`/courses/${session.courseId}/sessions/${session.sessionId}/exercises`)
+    const token = localStorage.getItem("token")
+    const res = await api.get(`/courses/${session.courseId}/sessions/${session.sessionId}/exercises`,{
+        headers: { Authorization: `Bearer ${token}` }
+    })
     const exercises = res.data || []
 
     exerciseBody.innerHTML = exercises.map((ex, index) =>
@@ -43,8 +46,11 @@ export async function renderExercise() {
                 const exerciseNo = btn.dataset.exerciseNo
                 const sessionId = btn.dataset.sessionNo
                 const courseId = btn.dataset.courseId
-
-                await api.delete(`/courses/${courseId}/sessions/${sessionId}/exercises/${exerciseNo}`)
+                
+                const token = localStorage.getItem("token")
+                await api.delete(`/courses/${courseId}/sessions/${sessionId}/exercises/${exerciseNo}`, {
+                    headers: { Authorization: `Bearer ${token}` }
+                })
                 loadPage("exercises")
             }catch(err){
                 console.error(err)
@@ -111,9 +117,13 @@ export function setupExerciseImport() {
             return;
         }
 
+        const token = localStorage.getItem("token")
         await api.post(
             `/courses/${selectedSession.courseId}/sessions/${selectedSession.sessionId}/exercises/import`,
-            { exercise }
+            { exercise },
+            {
+                headers: { Authorization: `Bearer ${token}` }
+            }
         )
 
         importResult.innerHTML = `

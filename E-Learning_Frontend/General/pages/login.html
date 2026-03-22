@@ -76,8 +76,10 @@
                 )
 
                 const user = response.data.user
+                const token = response.data.token
 
                 localStorage.setItem("loginUser", JSON.stringify(user))
+                localStorage.setItem("token", token) 
 
                 switch(user.Account_Roles){
 
