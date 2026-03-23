@@ -33,6 +33,7 @@ export async function importExercises(courseId, sessionId, exercises) {
             sessionId
         }
         await insertExercises(exercise)
+        lastNumber = exerciseNumber
     }
 }
 

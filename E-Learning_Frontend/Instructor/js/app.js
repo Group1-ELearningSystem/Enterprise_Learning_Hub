@@ -1,8 +1,14 @@
-import { renderCourses, setupAddingCourses, setupEditCourse } from "./courses.js";
-import { setupAccountForm } from "./settings.js";
-import { renderSessions, setupAddingSession, setupEditSession } from "./sessions.js";
-import { renderExercise, setupExerciseImport } from "./exercises.js";
-import { setupDashboard } from "./dashboard.js";
+// import { setupAddingCourses, setupEditCourse } from "./courses.js";
+import { setupAccountForm } from "./pages/settings/accountSetting.js";
+import { renderCourses } from "./pages/courses/index.js";
+import { setupEditCourse } from "./pages/courses/courseEdit.js";
+import { setupAddingCourses } from "./pages/courses/couseAdd.js";
+import { renderSessions } from "./pages/sessions/index.js";
+import { setupAddingSession } from "./pages/sessions/sessionAdd.js";
+import { setupEditSession } from "./pages/sessions/sessionEdit.js";
+import { renderExercise } from "./pages/exercises/index.js";
+import { setupExerciseImport } from "./pages/exercises/importExercises.js";
+import { setupDashboard } from "./pages/dashboard/dashboard.js";
 
 const navButtons = document.querySelectorAll(".nav-btn");
 const pageContainer = document.getElementById("pageContainer")
@@ -11,8 +17,6 @@ const userEmail = document.getElementById("userEmail");
 const logoutBtn = document.getElementById("logoutBtn");
 
 const loginUser = JSON.parse(localStorage.getItem("loginUser"))
-const instructors = JSON.parse(localStorage.getItem("instructors")) || [];
-const instructorDetail = instructors.find(i => i.accountId === loginUser.id);
 
 console.log(loginUser)
 if(!loginUser){
@@ -97,7 +101,8 @@ export async function loadPage(pageName) {
             break;
 
         case "edit_courses":
-            setupEditCourse()
+            const courseId = JSON.parse(localStorage.getItem("selectedCourseId"))
+            setupEditCourse(courseId)
             break;
         
         case "exercises":
