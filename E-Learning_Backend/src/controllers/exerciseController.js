@@ -21,8 +21,7 @@ export async function importExerciseController(req, res) {
     } catch(err){
         console.error(err)
         res.status(500).json({message:"Import failed"})
-    }
-    
+    } 
 }
 
 export async function removeExerciseController(req, res){

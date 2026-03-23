@@ -1,10 +1,7 @@
-import { loadPage } from "./app.js";
+import { loadPage } from "../../app.js";
 
 export function setupDashboard() {
-    const loginUser = JSON.parse(localStorage.getItem("loginUser"))
-    const instructors = JSON.parse(localStorage.getItem("instructors")) || [];
-    const instructorDetail = instructors.find(i => i.accountId === loginUser.id);
-
+    const loginUser = JSON.parse(localStorage.getItem("loginUser"))  
     const gotoButtons = pageContainer.querySelectorAll("[data-goto]");
     gotoButtons.forEach(btn => {
         btn.addEventListener("click", () => {

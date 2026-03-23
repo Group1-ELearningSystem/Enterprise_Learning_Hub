@@ -1,4 +1,4 @@
-import api from "../../axios/axios.js"
+import { updateAccount } from "../../services/accountService.js";
 
 export function setupAccountForm() {
     const passwordForm = document.getElementById("passwordForm");
@@ -6,11 +6,13 @@ export function setupAccountForm() {
     const emailDisplay = document.getElementById("emailDisplay");
     const phoneDisplay = document.getElementById("phoneDisplay");
 
+    const loginUser = JSON.parse(localStorage.getItem("loginUser"));
+
     nameDisplay.value = loginUser.Account_Username;
     emailDisplay.value = loginUser.email;
     phoneDisplay.value = loginUser.phone;
 
-    if(!passwordForm) return;
+    if (!passwordForm) return;
 
     passwordForm.addEventListener("submit", async (e) => {
         e.preventDefault()
@@ -21,39 +23,33 @@ export function setupAccountForm() {
         const success = document.getElementById("passSuccess");
         const error = document.getElementById("passError");
 
-        if(newPass.length < 6){
-            error.textContent = "Password must be at least 6 characters";
+        if (newPass.length < 8) {
+            error.textContent = "Password must be at least 8 characters";
             error.style.display = "block";
             return;
         }
 
-        if(newPass !== confirmPass){
+        if (newPass !== confirmPass) {
             error.textContent = "Confirm password is not matched with entered password"
             error.style.display = "block"
             success.style.display = "none"
             return;
         }
 
-        if(newPass.length < 6){
+        if (newPass.length < 6) {
             error.textContent = "New password must be at least 6 characters."
             error.style.display = "block"
             return;
         }
 
-        try{
-            const loginUser = JSON.parse(localStorage.getItem("loginUser"));
-
-            await api.post("/change-password", {
-                accountNumber: loginUser.Account_Number,
-                oldPassword: oldPass,
-                newPassword: newPass
-            })
+        try {
+            const token = localStorage.getItem("token")
+            await updateAccount(loginUser.Account_Number, oldPass, newPass, token)
             success.textContent = "Password updated successfully";
             success.style.display = "block";
             error.style.display = "none";
-
             passwordForm.reset();
-        } catch(err){
+        } catch (err) {
             error.textContent = err.response.data.message;
             error.style.display = "block";
             success.style.display = "none";

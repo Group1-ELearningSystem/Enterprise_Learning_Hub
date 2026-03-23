@@ -1,4 +1,7 @@
-import { courseRender, LoadCourseToForm, openEditCourse, setupAddingEmployeeCourses } from "./courses.js"
+// import { courseRender, LoadCourseToForm, openEditCourse, setupAddingEmployeeCourses } from "./courses.js"
+import { courseRender } from "./pages/courses/index.js"
+import { openEditCourse } from "./pages/courses/courseEdit.js"
+import { setupAddingEmployeeCourses } from "./pages/courses/courseAdd.js"
 import { renderInstructor, setupAddingInstructor, setupEdittingInstructor } from "./instructors.js"
 import { renderEmployee, setupAddingEmployee,setupEdittingEmployee } from "./employees.js"
 import { renderRequests, applyFilter, setupEdittingRequest } from "./requests.js"
