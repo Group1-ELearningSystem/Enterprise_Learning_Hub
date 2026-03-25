@@ -5,23 +5,58 @@ function generateCourseId() {
     return "CRS" + random
 }
 
+// export async function findCourseById(courseId) {
+//     const query = 
+//     `
+//         SELECT c.Course_ID, c.Course_Name, c.Course_Overview, c.Course_Objective, c.Course_Fee, c.Course_Status, i.Instructor_ID, i.Instructor_Full_Name AS Instructor_Name, cf.Field_Name,
+//                 IFNULL(AVG(fd.Feedback_Rating), 0) AS Avg_Rating,
+//                 COUNT(fd.Feedback_ID) AS Total_Feedbacks
+//         FROM Courses c
+//         LEFT JOIN Instructor_Courses ic ON c.Course_ID = ic.Course_ID
+//         LEFT JOIN Instructor i ON ic.Instructor_ID = i.Instructor_ID
+//         LEFT JOIN Courses_Fields cf ON c.Course_ID = cf.Course_ID
+//         LEFT JOIN Feedbacks fd ON c.Course_ID = fd.Course_ID
+//         WHERE c.Course_ID = ?
+//     `
+//     const [rows] = await db.execute(query, [courseId])
+//     return rows[0]
+// }
+
 export async function findCourseById(courseId) {
-    const query = 
-    `
-        SELECT c.Course_ID, c.Course_Name, c.Course_Overview, c.Course_Objective, c.Course_Fee, c.Course_Status, i.Instructor_ID, i.Instructor_Full_Name AS Instructor_Name, cf.Field_Name,
-                IFNULL(AVG(fd.Feedback_Rating), 0) AS Avg_Rating,
-                COUNT(fd.Feedback_ID) AS Total_Feedbacks
+    const query = `
+        SELECT 
+            c.Course_ID,
+            c.Course_Name,
+            c.Course_Overview,
+            c.Course_Objective,
+            c.Course_Fee,
+            c.Course_Status,
+            i.Instructor_ID,
+            i.Instructor_Full_Name AS Instructor_Name,
+            cf.Field_Name,
+            IFNULL(AVG(fd.Feedback_Rating), 0) AS Avg_Rating,
+            COUNT(fd.Feedback_ID) AS Total_Feedbacks
         FROM Courses c
         LEFT JOIN Instructor_Courses ic ON c.Course_ID = ic.Course_ID
         LEFT JOIN Instructor i ON ic.Instructor_ID = i.Instructor_ID
         LEFT JOIN Courses_Fields cf ON c.Course_ID = cf.Course_ID
         LEFT JOIN Feedbacks fd ON c.Course_ID = fd.Course_ID
         WHERE c.Course_ID = ?
-    `
-    const [rows] = await db.execute(query, [courseId])
-    return rows[0]
-}
+        GROUP BY 
+            c.Course_ID,
+            c.Course_Name,
+            c.Course_Overview,
+            c.Course_Objective,
+            c.Course_Fee,
+            c.Course_Status,
+            i.Instructor_ID,
+            i.Instructor_Full_Name,
+            cf.Field_Name
+    `;
 
+    const [rows] = await db.execute(query, [courseId]);
+    return rows[0] || null;
+}
 export async function findAllCourse(page, limit) {
     const offset = (page - 1) * limit;
     const query =
