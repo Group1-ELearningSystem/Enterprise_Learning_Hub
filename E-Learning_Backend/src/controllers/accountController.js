@@ -4,15 +4,26 @@ import { verifyCode } from "../services/accountService.js";
 import jwt from "jsonwebtoken"
 
 export async function loginController(req, res) {
-    const {email, password} = req.body
-    
-    try{
-        const user = await login(email,password);
+    const { email, password } = req.body
+
+    try {
+        const user = await login(email, password);
+        // const token = jwt.sign(
+        //     {
+        //         id: user.Account_ID,
+        //         role: user.Account_Roles, 
+        //         Instructor_ID: user.Instructor_ID
+        //     },
+        //     process.env.JWT_SECRET,
+        //     { expiresIn: "1d" }
+        // );
         const token = jwt.sign(
             {
                 id: user.Account_ID,
-                role: user.Account_Roles, 
-                Instructor_ID: user.Instructor_ID
+                role: user.Account_Roles,
+                accountNumber: user.Account_Number || null,
+                learnerId: user.Learner_ID || null,
+                Instructor_ID: user.Instructor_ID || null
             },
             process.env.JWT_SECRET,
             { expiresIn: "1d" }
@@ -22,33 +33,33 @@ export async function loginController(req, res) {
             token,
             user
         });
-    }catch(err){
+    } catch (err) {
         console.log(err)
-        if(err.message === "EMAIL_NOT_FOUND"){
-            return res.status(400).json({message:"Invalid email"});
+        if (err.message === "EMAIL_NOT_FOUND") {
+            return res.status(400).json({ message: "Invalid email" });
         }
-        if(err.message === "WRONG_PASSWORD"){
-            return res.status(400).json({message:"Invalid password"});
+        if (err.message === "WRONG_PASSWORD") {
+            return res.status(400).json({ message: "Invalid password" });
         }
-        res.status(500).json({message:"Server error"});
+        res.status(500).json({ message: "Server error" });
     }
 }
 
 export async function registerController(req, res) {
-    const {name, email, password} = req.body;
+    const { name, email, password } = req.body;
 
-    try{
-        const result = await register(name,email,password);
+    try {
+        const result = await register(name, email, password);
         res.json(result);
-    }catch(err){
+    } catch (err) {
         console.log(err)
-        if(err.message === "EMAIL_EXISTS"){
+        if (err.message === "EMAIL_EXISTS") {
             return res.status(400).json({
-                message:"Email already registered"
+                message: "Email already registered"
             });
         }
         res.status(500).json({
-            message:"Server error"
+            message: "Server error"
         });
     }
 }
@@ -57,29 +68,29 @@ export async function verifyController(req, res) {
     const { savedEmail, code } = req.body
     console.log(savedEmail)
     console.log(code)
-    try{
-        const result = await verifyCode(savedEmail,code);
+    try {
+        const result = await verifyCode(savedEmail, code);
         res.json(result);
-    }catch(err){
+    } catch (err) {
         console.log(err)
-        if(err.message === "INVALID_CODE"){
+        if (err.message === "INVALID_CODE") {
             return res.status(400).json({
-                message:"Invalid or expired code"
+                message: "Invalid or expired code"
             });
         }
 
         res.status(500).json({
-            message:"Server error"
+            message: "Server error"
         });
     }
 }
 
 export async function changePasswordController(req, res) {
-    const {accountNumber, oldPassword, newPassword} = req.body
+    const { accountNumber, oldPassword, newPassword } = req.body
     console.log(accountNumber)
     console.log(oldPassword)
     console.log(newPassword)
-    try{
+    try {
         const result = await changePassword(
             accountNumber,
             oldPassword,
@@ -87,20 +98,20 @@ export async function changePasswordController(req, res) {
         );
         console.log(result)
         res.json(result);
-    }catch(err){
+    } catch (err) {
         console.log(err)
-        if(err.message === "WRONG_PASSWORD"){
+        if (err.message === "WRONG_PASSWORD") {
             return res.status(400).json({
-                message:"Old password is incorrect"
+                message: "Old password is incorrect"
             });
         }
-        if(err.message === "PASSWORD_SAME"){
+        if (err.message === "PASSWORD_SAME") {
             return res.status(400).json({
-                message:"New password must be different"
+                message: "New password must be different"
             });
         }
         res.status(500).json({
-            message:"Server error"
+            message: "Server error"
         });
     }
 }
