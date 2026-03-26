@@ -1,23 +1,38 @@
+import { instructorRender } from "../../pages/instructors/index.js";
 import { searchInstructors } from "../../services/instructorService.js";
+import { renderInstructorCard } from "./instructorTable.js";
 
 let selectedInstructorId = null;
 
 export function getSelectedInstructorId() {
     return selectedInstructorId;
 }
+function selectInstructor(instructor, onSelect) {
+    const input =document.getElementById("instructorSearch")
+    const suggestionBox = document.getElementById("instructorSuggestions")
+    input.value = `${instructor.Instructor_Full_Name} - (ID: ${instructor.Instructor_ID})`
 
-function selectInstructor(instructor) {
-    const input = document.getElementById("instructorSearch");
-    const suggestionBox = document.getElementById("instructorSuggestions");
-    input.value = `${instructor.Instructor_Full_Name} - (ID: ${instructor.Instructor_ID})`;
-    selectedInstructorId = instructor.Instructor_ID;
-    suggestionBox.style.display = "none";
+    selectedInstructorId = instructor.Instructor_ID
+    suggestionBox.style.display = "none"
+
+    if (onSelect) {
+        onSelect(instructor)
+    }
 }
 
-export function setupInstructorSearch() {
+async function searchInstructor(keyword, onSelect) {
+    try {
+        const token = localStorage.getItem("token")
+        const res = await searchInstructors(keyword, token)
+        renderInstructorSuggestions(res,onSelect)
+    } catch (err) {
+        console.error(err)
+    }
+}
+
+export function setupInstructorSearch(onSelect = null) {
     const input = document.getElementById("instructorSearch")
     const suggestionBox = document.getElementById("instructorSuggestions")
-
     let debounceTimer
 
     input.addEventListener("input", () => {
@@ -28,23 +43,14 @@ export function setupInstructorSearch() {
             suggestionBox.style.display = "none"
             return
         }
+
         debounceTimer = setTimeout(() => {
-            searchInstructor(keyword)
+            searchInstructor(keyword, onSelect)
         }, 400)
     })
 }
 
-async function searchInstructor(keyword) {
-    try {
-        const token = localStorage.getItem("token")
-        const res = await searchInstructors(keyword, token)
-        renderInstructorSuggestions(res)
-    } catch (err) {
-        console.error(err)
-    }
-}
-
-function renderInstructorSuggestions(instructors) {
+function renderInstructorSuggestions(instructors, onSelect) {
     const suggestionBox = document.getElementById("instructorSuggestions")
     suggestionBox.innerHTML = ""
     if (instructors.length === 0) {
@@ -55,8 +61,7 @@ function renderInstructorSuggestions(instructors) {
     instructors.forEach(instructor => {
         const item = document.createElement("div")
         item.classList.add("suggestion-item")
-        item.innerHTML =    
-            `
+        item.innerHTML = `
             <strong>
                 ${instructor.Instructor_Full_Name}
             </strong>
@@ -68,8 +73,9 @@ function renderInstructorSuggestions(instructors) {
                 | ${instructor.Instructor_Phone_Number}
             </small>
         `
+
         item.addEventListener("click", () => {
-            selectInstructor(instructor)
+            selectInstructor(instructor,onSelect)
         })
         suggestionBox.appendChild(item)
     })

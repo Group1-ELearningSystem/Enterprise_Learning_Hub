@@ -17,18 +17,7 @@ const userEmail = document.getElementById("userEmail");
 const logoutBtn = document.getElementById("logoutBtn");
 
 const loginUser = JSON.parse(localStorage.getItem("loginUser"))
-
-console.log(loginUser)
-if(!loginUser){
-    window.location.href = "../../General/pages/login.html"
-}
-if(loginUser.Account_Roles !== "Instructor" || loginUser.Account_Status !== "Active") {
-    alert("Access denied!")
-    window.location.href = "../../General/pages/login.html"
-}
-
 userEmail.textContent = loginUser.email;
-
 
 navButtons.forEach(btn => {
     btn.addEventListener("click", () => {

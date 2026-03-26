@@ -3,7 +3,7 @@ import { getAllCourseController, getCoursesByInstructorsController, createCoureC
 import { verifyToken, authorizeRoles } from "../middlewares/authMiddlewares.js";
 const router = express.Router()
 
-router.get("/instructor/:id/courses", verifyToken, authorizeRoles("Instructor"), getCoursesByInstructorsController)
+router.get("/instructor/:id/courses", verifyToken, getCoursesByInstructorsController)
 router.post("/courses", verifyToken, authorizeRoles("Instructor", "Employee"), createCoureController)
 router.put("/courses/:id", verifyToken, authorizeRoles("Instructor", "Employee"), updateCoureController)
 router.get("/courses/:courseId/feedbacks", verifyToken, authorizeRoles("Instructor", "Employee"), getCourseFeedbackController)
