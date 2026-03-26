@@ -39,10 +39,90 @@
                     <th>Submission Date</th>
                     <th>Amount</th>
                     <th>Status</th>
+                    <th>Action</th>
                 </tr>
             </thead>
             <tbody id="requestTable"></tbody>
         </table>
     </div>
+</div>
 
+<!-- Request Detail Modal -->
+<div class="modal fade" id="requestModal" tabindex="-1">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">
+                    Request Details
+                </h5>
+
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+
+            <div class="modal-body">
+                <div class="row">
+                    <div class="col-md-6">
+                        <label>Learner</label>
+                        <input id="modalLearner" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-6">
+                        <label>Course</label>
+                        <input id="modalCourse" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-6 mt-3">
+                        <label>Amount</label>
+                        <input id="modalAmount" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-6 mt-3">
+                        <label>Status</label>
+
+                        <select id="modalStatus" class="form-control">
+                            <option value="Processing">
+                                Processing
+                            </option>
+
+                            <option value="Approved">
+                                Approved
+                            </option>
+
+                            <option value="Rejected">
+                                Rejected
+                            </option>
+                        </select>
+                    </div>
+
+                    <div class="col-md-6 mt-3">
+                        <label>Background</label>
+                        <input id="modalBackground" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-6 mt-3">
+                        <label>Employment</label>
+                        <input id="modalEmployment" class="form-control" readonly>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <label>Reason</label>
+
+                        <textarea id="modalReason" class="form-control" rows="3" readonly></textarea>
+                    </div>
+
+                    <div class="col-md-12 mt-3">
+                        <label>Proof Image</label>
+                        <img id="modalProof" class="img-fluid border rounded" style="max-height:300px">
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button id="updateStatusBtn" class="btn btn-success">
+                    Update Status
+                </button>
+            </div>
+
+        </div>
+    </div>
 </div>

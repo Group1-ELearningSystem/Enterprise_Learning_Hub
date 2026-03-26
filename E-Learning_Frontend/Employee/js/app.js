@@ -5,9 +5,9 @@ import { setupAddingEmployeeCourses } from "./pages/courses/courseAdd.js"
 // import { renderInstructor, setupAddingInstructor, setupEdittingInstructor } from "./instructors.js"
 import { instructorRender } from "./pages/instructors/index.js"
 import { renderEmployee, setupAddingEmployee,setupEdittingEmployee } from "./employees.js"
-import { renderRequests, applyFilter, setupEdittingRequest } from "./requests.js"
 import { openEditInstructor } from "./pages/instructors/instructorEdit.js"
 import { setupAddingInstructor } from "./pages/instructors/instructorAdd.js"
+import { renderRequests } from "./pages/requests/index.js"
 
 const menuItems = document.querySelectorAll(".menu-item")
 const pageContainer = document.getElementById("pageContainer")
@@ -102,13 +102,7 @@ export async function loadPage(pageName){
         }
 
         if(pageName === "requests"){
-            const requests = JSON.parse(localStorage.getItem("requests"))
-            renderRequests(requests)
-
-            document.getElementById("requestSearch").addEventListener("input", applyFilter);
-            document.getElementById("requestStatus").addEventListener("change", applyFilter);
-            document.getElementById("requestDate").addEventListener("change", applyFilter);
-
+            renderRequests()
         }
 
         if(pageName === "editting_requests"){
