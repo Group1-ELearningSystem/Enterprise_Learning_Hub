@@ -2,9 +2,12 @@
 import { courseRender } from "./pages/courses/index.js"
 import { openEditCourse } from "./pages/courses/courseEdit.js"
 import { setupAddingEmployeeCourses } from "./pages/courses/courseAdd.js"
+import { employeeRender } from "./pages/employees/index.js"
+import { setupAddingEmployee } from "./pages/employees/employeeAdd.js"
+import { openEditEmployee } from "./pages/employees/employeeEdit.js"
 // import { renderInstructor, setupAddingInstructor, setupEdittingInstructor } from "./instructors.js"
 import { instructorRender } from "./pages/instructors/index.js"
-import { renderEmployee, setupAddingEmployee,setupEdittingEmployee } from "./employees.js"
+// import { renderEmployee, setupAddingEmployee,setupEdittingEmployee } from "./employees.js"
 import { openEditInstructor } from "./pages/instructors/instructorEdit.js"
 import { setupAddingInstructor } from "./pages/instructors/instructorAdd.js"
 import { renderRequests } from "./pages/requests/index.js"
@@ -77,19 +80,7 @@ export async function loadPage(pageName){
         }
 
         if(pageName === "employees"){
-            const employees = JSON.parse(localStorage.getItem("employees"))
-            renderEmployee(employees)
-
-            const inputSearch = document.getElementById("employeeSearch")
-            inputSearch.addEventListener("input", () => {
-                const employeeList = JSON.parse(localStorage.getItem("employees"))
-                const input = inputSearch.value.toLowerCase()
-                const filteredEmployee = employeeList.filter(e => e.id.toLowerCase().includes(input) || e.name.toLowerCase().includes(input)
-                                                            || e.email.toLowerCase().includes(input) || e.phone.toLowerCase().includes(input)
-                                                            || e.address.toLowerCase().includes(input))
-
-                renderEmployee(filteredEmployee)
-            })
+            employeeRender()
         }
 
         if(pageName === "add_employees"){
@@ -98,7 +89,7 @@ export async function loadPage(pageName){
 
         if(pageName === "editting_employees"){
             const selectedEmployeeId = JSON.parse(localStorage.getItem("selectedEmployeeId"))
-            setupEdittingEmployee(selectedEmployeeId)
+            openEditEmployee(selectedEmployeeId)
         }
 
         if(pageName === "requests"){

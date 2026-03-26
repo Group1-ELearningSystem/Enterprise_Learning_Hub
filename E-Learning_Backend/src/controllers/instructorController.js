@@ -35,6 +35,7 @@ export async function addInstructorController(req, res) {
         res.status(500).json({ message: "Failed to create new instructors" })
     }
 }
+
 export async function getAllInstructorController(req, res) {
     try {
         const instructors = await getAllInstructorsService()
