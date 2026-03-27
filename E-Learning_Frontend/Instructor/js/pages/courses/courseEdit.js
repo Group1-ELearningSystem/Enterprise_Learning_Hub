@@ -3,6 +3,8 @@ import { getCourseById, getCourseEarnings } from "../../services/courseService.j
 import { updateCourse } from "../../services/courseService.js";
 import { loadFields } from "../../components/courses/courseField.js";
 import { loadPage } from "../../app.js";
+import { setupCourseEarningDetails } from "./courseEarning.js";
+import { loadCourseQuestions } from "../../components/courses/courseQA.js";
 
 async function loadCourseEarnings(courseId) {
     try {
@@ -33,7 +35,9 @@ export async function setupEditCourse(courseId) {
     document.getElementById("courseField").value = course.Field_Name
 
     loadFeedbacks(course.Course_ID)
+    await loadCourseQuestions(courseId, 1)
     loadCourseEarnings(course.Course_ID)
+    setupCourseEarningDetails(course.Course_ID, 1)
 
     backBtn.addEventListener("click", () => {
         loadPage("courses")

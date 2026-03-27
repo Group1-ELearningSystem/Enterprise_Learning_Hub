@@ -1,4 +1,5 @@
-import { findAllCourse, findCourseById, insertCourseWithInstructor, findCoursesByInstructor, findFeedbacksByCourse, findCourseEarning, searchCoursesByTitleEmployee, searchCoursesByTitleInstructor, updateCourseInformation } from "../repository/courseRepository.js";
+import { getUnansweredQuestion, updateAnswer } from "../repository/courseRepository.js";
+import { findAllCourse, findCourseById, insertCourseWithInstructor, findCoursesByInstructor, findFeedbacksByCourse, findCourseEarning, searchCoursesByTitleEmployee, searchCoursesByTitleInstructor, updateCourseInformation, findCourseEarningDetails } from "../repository/courseRepository.js";
 
 export async function getAllCourses(page,limit) {
     page = Number(page) || 1;
@@ -63,6 +64,11 @@ export async function searchCourses(keyword, role, instructorId, page=1, limit=6
     }));
 }
 
+export async function getUnansweredQuestionService(courseId, page) {
+    const questions = await getUnansweredQuestion(courseId,page)
+    return questions;
+}
+
 export async function createCourse(course, instructorId, fieldName){
     const courseId = await insertCourseWithInstructor(course, instructorId, fieldName)
     return {
@@ -108,9 +114,19 @@ export async function getCourseEarning(courseId) {
     };
 }
 
+
+export async function getCourseEarningDetails(courseId, limit, offset) {
+    const data = await findCourseEarningDetails(courseId, limit, offset);
+    return data
+}
+
 export async function updateCourses(course, courseId, fieldName) {
     await updateCourseInformation(course, courseId, fieldName)
     return {
         message: "Course updated successfully"
     }
+}
+
+export async function submitAnswerService(questionId, answerText) {
+    await updateAnswer(questionId, answerText)
 }
