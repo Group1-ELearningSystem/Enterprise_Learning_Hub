@@ -9,7 +9,8 @@ export async function loadFeedbacks(courseId, page = 1) {
         const feedbacks = await getCourseFeedbacks(courseId, page, token)
         renderFeedbacks(feedbacks)
         renderPagination(page,
-            (newPage) => loadFeedbacks(courseId, newPage)
+            (newPage) => loadFeedbacks(courseId, newPage),
+            "pagination"
         );
     } catch (err) {
         console.error(err)

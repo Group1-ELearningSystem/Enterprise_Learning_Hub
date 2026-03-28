@@ -1,4 +1,4 @@
-import { getAllCourses, getCourseById, createCourseForInstructor, getCoursesByInstructors, createCourse, updateCourses, searchCourses, getFeedbackForCourse, getCourseEarning } from "../services/courseService.js";
+import { getAllCourses, getCourseById, createCourseForInstructor, getCoursesByInstructors, createCourse, updateCourses, searchCourses, getFeedbackForCourse, getCourseEarning, getCourseEarningDetails, getUnansweredQuestionService, submitAnswerService } from "../services/courseService.js";
 
 export async function getAllCourseController(req, res) {
     try {
@@ -21,7 +21,7 @@ export async function getCourseByIdController(req, res) {
         res.json(course)
     } catch (err) {
         console.error(err)
-        res.status(500).json({ message: "Failed to fetch course"})
+        res.status(500).json({ message: "Failed to fetch course" })
     }
 }
 
@@ -74,6 +74,33 @@ export async function getCourseEarningController(req, res) {
     } catch (err) {
         console.error(err);
         res.status(500).json({ message: "Server error" });
+    }
+}
+
+export async function getCourseEarningDetailsController(req, res) {
+    try {
+        const courseId = req.params.courseId
+        const page = parseInt(req.query.page) || 1
+        const limit = 3
+        const offset = (page - 1) * limit
+        const data = await getCourseEarningDetails(courseId, limit, offset)
+        res.status(200).json(data)
+    } catch (err) {
+        console.log(err)
+        res.status(500).json({ message: "Server error" });
+    }
+}
+
+export async function getUnansweredQuestionController(req, res) {
+    try {
+        const courseId = req.params.id
+        const page = parseInt(req.query.page) || 1
+        const questions = await getUnansweredQuestionService(courseId,page)
+        res.status(200).json(questions);
+    }
+    catch (error) {
+        console.error(error);
+        res.status(500).json({message:"Error fetching questions"});
     }
 }
 
@@ -132,5 +159,18 @@ export async function createCourseForInstructorController(req, res) {
         res.status(500).json({
             message: err.message
         })
+    }
+}
+
+export async function answerQuestion(req, res) {
+    try {
+        const { questionId } = req.params
+        const { answerText } = req.body
+        await submitAnswerService(questionId, answerText)
+        res.json({message: "Answer saved"})
+    }
+    catch (error) {
+        console.log(error)
+        res.status(500).json({message: "Error saving answer"})
     }
 }
