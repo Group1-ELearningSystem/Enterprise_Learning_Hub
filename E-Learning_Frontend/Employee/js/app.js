@@ -2,26 +2,24 @@
 import { courseRender } from "./pages/courses/index.js"
 import { openEditCourse } from "./pages/courses/courseEdit.js"
 import { setupAddingEmployeeCourses } from "./pages/courses/courseAdd.js"
-import { renderInstructor, setupAddingInstructor, setupEdittingInstructor } from "./instructors.js"
-import { renderEmployee, setupAddingEmployee,setupEdittingEmployee } from "./employees.js"
-import { renderRequests, applyFilter, setupEdittingRequest } from "./requests.js"
+import { employeeRender } from "./pages/employees/index.js"
+import { setupAddingEmployee } from "./pages/employees/employeeAdd.js"
+import { openEditEmployee } from "./pages/employees/employeeEdit.js"
+// import { renderInstructor, setupAddingInstructor, setupEdittingInstructor } from "./instructors.js"
+import { instructorRender } from "./pages/instructors/index.js"
+// import { renderEmployee, setupAddingEmployee,setupEdittingEmployee } from "./employees.js"
+import { openEditInstructor } from "./pages/instructors/instructorEdit.js"
+import { setupAddingInstructor } from "./pages/instructors/instructorAdd.js"
+import { renderRequests } from "./pages/requests/index.js"
 
 const menuItems = document.querySelectorAll(".menu-item")
 const pageContainer = document.getElementById("pageContainer")
 const pageTitle = document.getElementById("pageTitle")
 const logoutBtn = document.getElementById("logoutBtn")
 const userEmail = document.getElementById("userEmail")
+
 const loginUser = JSON.parse(localStorage.getItem("loginUser"))
-
 userEmail.textContent = loginUser.email
-
-if(!loginUser){
-    window.location.href = "../../General/pages/login.html"
-}
-if(loginUser.Account_Roles !== 'Employee' || loginUser.Account_Status !== 'Active') {
-    alert("Access denied!")
-    window.location.href = "../../General/pages/login.html"
-}
 
 menuItems.forEach(item => {
     item.addEventListener("click", () => {
@@ -69,18 +67,7 @@ export async function loadPage(pageName){
         }
 
         if(pageName === "instructors"){
-            const instructors = JSON.parse(localStorage.getItem("instructors"))
-            renderInstructor(instructors)
-            
-            const inputSearch = document.getElementById("instructorSearch")
-            inputSearch.addEventListener("input", () => {
-                const instructorList = JSON.parse(localStorage.getItem("instructors"))
-                const input = inputSearch.value.toLowerCase()
-                const filteredInstructor = instructorList.filter(i => i.id.toLowerCase().includes(input) || i.name.toLowerCase().includes(input)
-                                                                || i.email.toLowerCase().includes(input) || i.phone.toLowerCase().includes(input))
-
-                renderInstructor(filteredInstructor)
-            })
+            instructorRender()
         }
 
         if(pageName === "add_instructors"){
@@ -89,23 +76,11 @@ export async function loadPage(pageName){
 
         if(pageName === "editting_instructors"){
             const selectedInstructorId = JSON.parse(localStorage.getItem("selectedInstructorId"))
-            setupEdittingInstructor(selectedInstructorId)
+            openEditInstructor(selectedInstructorId)
         }
 
         if(pageName === "employees"){
-            const employees = JSON.parse(localStorage.getItem("employees"))
-            renderEmployee(employees)
-
-            const inputSearch = document.getElementById("employeeSearch")
-            inputSearch.addEventListener("input", () => {
-                const employeeList = JSON.parse(localStorage.getItem("employees"))
-                const input = inputSearch.value.toLowerCase()
-                const filteredEmployee = employeeList.filter(e => e.id.toLowerCase().includes(input) || e.name.toLowerCase().includes(input)
-                                                            || e.email.toLowerCase().includes(input) || e.phone.toLowerCase().includes(input)
-                                                            || e.address.toLowerCase().includes(input))
-
-                renderEmployee(filteredEmployee)
-            })
+            employeeRender()
         }
 
         if(pageName === "add_employees"){
@@ -114,17 +89,11 @@ export async function loadPage(pageName){
 
         if(pageName === "editting_employees"){
             const selectedEmployeeId = JSON.parse(localStorage.getItem("selectedEmployeeId"))
-            setupEdittingEmployee(selectedEmployeeId)
+            openEditEmployee(selectedEmployeeId)
         }
 
         if(pageName === "requests"){
-            const requests = JSON.parse(localStorage.getItem("requests"))
-            renderRequests(requests)
-
-            document.getElementById("requestSearch").addEventListener("input", applyFilter);
-            document.getElementById("requestStatus").addEventListener("change", applyFilter);
-            document.getElementById("requestDate").addEventListener("change", applyFilter);
-
+            renderRequests()
         }
 
         if(pageName === "editting_requests"){

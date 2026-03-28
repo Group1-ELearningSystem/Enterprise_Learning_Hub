@@ -8,12 +8,11 @@ const transporter = nodemailer.createTransport({
     }
 })
 
-export async function sendVerificationEmail(email, code){
+export async function sendEmail(email, subject, text){
     await transporter.sendMail({
         from: '"E-Learning System" <your_email@gmail.com>',
         to: email,
-        subject: "Email Verification Code",
-        text: `Your verification code is: ${code}`
+        subject: subject,
+        text: text
     });
-
 }

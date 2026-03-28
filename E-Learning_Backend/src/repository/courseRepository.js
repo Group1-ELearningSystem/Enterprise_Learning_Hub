@@ -126,6 +126,44 @@ export async function findCourseEarning(courseId) {
     return rows[0];
 }
 
+export async function findCourseEarningDetails(courseId, limit, offset) {
+    const query = 
+    `
+        SELECT  s.Subscription_ID, u.Learner_Full_Name, s.Subscription_Date, c.Course_Fee,
+            -- System takes 20%
+            (c.Course_Fee * 0.20) AS system_fee,
+            -- Instructor receives 80%
+            (c.Course_Fee * 0.80) AS instructor_earning
+        FROM Subscription s
+        JOIN Learner u ON s.Learner_ID = u.Learner_ID
+        JOIN Courses c ON s.Course_ID = c.Course_ID
+        WHERE s.Course_ID = ?
+        AND s.Subscription_Status = 'Active'
+        ORDER BY s.Subscription_Date DESC
+        LIMIT ${Number(limit)} OFFSET ${Number(offset)}
+    `
+    const [rows] = await db.execute(query,[courseId]);
+    return rows;
+}
+
+export async function getUnansweredQuestion(courseId, page) {
+    const limit = 5;
+    const offset = (page - 1) * limit;
+
+    const query = 
+    `
+        SELECT q.Question_ID, q.Question_Text, q.Question_Asked_At, l.Learner_Full_Name
+        FROM CourseQuestions q
+        JOIN Learner l ON q.Learner_ID = l.Learner_ID
+        WHERE q.Course_ID = ?
+        AND q.Answer_Text IS NULL
+        ORDER BY q.Question_Asked_At DESC
+        LIMIT ${Number(limit)} OFFSET ${Number(offset)}
+    `
+    const [rows] = await db.execute(query, [courseId]);
+    return rows;
+}
+
 export async function searchCoursesByTitleInstructor(keyword, instructorId) {
     const query =
         `
@@ -260,4 +298,15 @@ export async function updateCourseInformation(course, courseId, fieldName) {
     } finally{
         connection.release
     }
+}
+
+export async function updateAnswer(questionId, answerText) {
+    const query = 
+    `
+        UPDATE CourseQuestions
+        SET Answer_Text = ?, Question_Answered_At = NOW()
+        WHERE Question_ID = ?
+    `
+
+    await db.execute(query, [answerText, questionId])
 }

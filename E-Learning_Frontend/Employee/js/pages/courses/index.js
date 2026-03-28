@@ -33,7 +33,8 @@ export async function courseRender(page = 1) {
 
         renderPagination(
             res.page,
-            courseRender
+            courseRender,
+            "pagination"
         );
     } catch (err) {
         console.log(err)

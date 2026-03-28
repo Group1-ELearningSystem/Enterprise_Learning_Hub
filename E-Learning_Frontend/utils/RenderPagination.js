@@ -1,8 +1,6 @@
-let currentPage = 1;
-
-export function renderPagination(page, callback) {
-    currentPage = page
-    const container = document.getElementById("pagination")
+export function renderPagination(page, callback, paginationId) {
+    console.log("Rendering pagination...");
+    const container = document.getElementById(`${paginationId}`)
 
     container.innerHTML =
         `
@@ -10,20 +8,16 @@ export function renderPagination(page, callback) {
         <span class="page-info">Page ${page}</span>
         <button class="page-btn" id="nextPage">→</button>
     `
+    const prevBtn = container.querySelector("#prevPage");
+    const nextBtn = container.querySelector("#nextPage");
 
-    document.getElementById("prevPage")?.addEventListener("click", () => {
-        if (currentPage > 1) {
-            currentPage--;
-            callback(
-                currentPage
-            );
+    prevBtn?.addEventListener("click", () => {
+        if (page > 1) {
+            callback(page - 1); 
         }
-    })
+    });
 
-    document.getElementById("nextPage")?.addEventListener("click", () => {
-        currentPage++
-        callback(
-            currentPage
-        );
-    })
+    nextBtn?.addEventListener("click", () => {
+        callback(page + 1);
+    });
 }
