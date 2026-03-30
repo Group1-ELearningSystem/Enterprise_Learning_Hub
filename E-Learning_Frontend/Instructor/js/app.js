@@ -29,6 +29,8 @@ logoutBtn.addEventListener("click", () => {
     const ok = confirm("Do you want to logout?");
     if (ok) {
         alert("You have logout");
+        window.location.href="http://localhost:5173/"
+        localStorage.removeItem("loginUser")
     }
 })
 

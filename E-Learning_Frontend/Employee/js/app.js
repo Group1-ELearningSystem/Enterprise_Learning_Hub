@@ -34,9 +34,13 @@ menuItems.forEach(item => {
 })
 
 logoutBtn.addEventListener("click", () => {
-    localStorage.removeItem("loginUser");
-    window.location.href = "../../General/pages/login.html";
-});
+    const ok = confirm("Do you want to logout?");
+    if (ok) {
+        alert("You have logout");
+        window.location.href="http://localhost:5173/"
+        localStorage.removeItem("loginUser")
+    }
+})
 
 export async function loadPage(pageName){
     try{
