@@ -1,12 +1,36 @@
+import api from "../axios/axios.js";
+import { formatPrice } from "./app.js";
+
 const courseList = document.getElementById("courseList");
 const searchInput = document.getElementById("searchInput");
 const categoryFilter = document.getElementById("categoryFilter");
 const priceFilter = document.getElementById("priceFilter");
 
+let allCourses = [];
+
+function formatPrice(price) {
+    return Number(price) === 0
+        ? "Free"
+        : Number(price).toLocaleString("vi-VN") + " VND";
+}
+
+function normalizeCourse(course) {
+    return {
+        id: course.courseId,
+        title: course.courseName,
+        category: course.fieldName || "General",
+        price: Number(course.courseFee || 0),
+        description: course.courseOverview || "No description available.",
+        lessons: course.totalSessions || 0,
+        level: course.level || "All Levels",
+        objective: course.courseObjective || ""
+    };
+}
+
 function renderCourses(courses) {
     courseList.innerHTML = "";
 
-    if (courses.length === 0) {
+    if (!courses.length) {
         courseList.innerHTML = `
             <div class="card">
                 <p>No courses found.</p>
@@ -15,7 +39,7 @@ function renderCourses(courses) {
         return;
     }
 
-    courses.forEach(function(course) {
+    courses.forEach((course) => {
         const card = document.createElement("div");
         card.className = "course-card";
 
@@ -31,13 +55,14 @@ function renderCourses(courses) {
                 </div>
                 <p class="course-desc">${course.description}</p>
                 <div class="course-footer">
-                    <span class="price">
-                        ${course.price === 0 ? "Free" : course.price.toLocaleString("vi-VN") + " VND"}
-                    </span>
-                    <button class="btn btn-primary" onclick="viewCourse(${course.id})">View</button>
+                    <span class="price">${formatPrice(course.price)}</span>
+                    <button class="btn btn-primary" data-id="${course.id}">View</button>
                 </div>
             </div>
         `;
+
+        const btn = card.querySelector("button");
+        btn.addEventListener("click", () => viewCourse(course.id));
 
         courseList.appendChild(card);
     });
@@ -48,7 +73,7 @@ function filterCourses() {
     const category = categoryFilter.value;
     const price = priceFilter.value;
 
-    const filtered = coursesData.filter(course => {
+    const filtered = allCourses.filter((course) => {
         const matchKeyword = course.title.toLowerCase().includes(keyword);
         const matchCategory = category === "all" || course.category === category;
         const matchPrice =
@@ -63,12 +88,29 @@ function filterCourses() {
 }
 
 function viewCourse(id) {
-    localStorage.setItem("selectedCourseId", id);
-    window.location.href = "course_detail.html";
+    window.location.href = `course_detail.html?courseId=${encodeURIComponent(id)}`;
+}
+
+async function loadCourses() {
+    try {
+        courseList.innerHTML = `<div class="card"><p>Loading courses...</p></div>`;
+
+        const response = await api.get("/learner/courses");
+        allCourses = (response.data.courses || []).map(normalizeCourse);
+
+        renderCourses(allCourses);
+    } catch (error) {
+        console.error("Load courses failed:", error);
+        courseList.innerHTML = `
+            <div class="card">
+                <p>Failed to load courses.</p>
+            </div>
+        `;
+    }
 }
 
 searchInput.addEventListener("input", filterCourses);
 categoryFilter.addEventListener("change", filterCourses);
 priceFilter.addEventListener("change", filterCourses);
 
-renderCourses(coursesData);
+loadCourses();

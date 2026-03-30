@@ -42,11 +42,10 @@ export async function register(fullName, emailAddress, password) {
 
     const accountNumber = await getNextAccountNumber()
     const learnerId = await getNextLearnerId()
-    const username = fullName.replace(/\s/g,'')
 
     await createAccount({
         accountNumber,
-        username,
+        emailAddress,
         password: hashPassword,
         role: "Learner",
         status: "Not Verified"

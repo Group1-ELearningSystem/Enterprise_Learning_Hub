@@ -7,9 +7,9 @@ import exerciseRoutes from "./routes/exerciseRoutes.js";
 import fieldRoutes from "./routes/fieldRoutes.js";
 import instructorRoutes from "./routes/instructorRoutes.js";
 import requestRoutes from "./routes/requestRoutes.js";
-import learnerCourseRoutes from "./routes/learnerCourseRoutes.js";
+import learnerRoutes from "./routes/learnerRoutes.js";
 import employeeRoutes from "./routes/employeeRoutes.js"
-
+import authRoutes from "./routes/authRoutes.js";
 const app = express();
 
 app.use(cors({ origin: "*" }));
@@ -26,10 +26,7 @@ app.use("/api", fieldRoutes);
 app.use("/api", instructorRoutes);
 app.use("/api", requestRoutes)
 app.use("/api", employeeRoutes)
-
-/**
- * Learner - Course routes
- */
-app.use("/api/learner", learnerCourseRoutes);
+app.use("/api/learner", learnerRoutes);
+app.use("/api/auth", authRoutes);
 
 export default app;
