@@ -1,6 +1,4 @@
-import { selectCourseFromSearch } from "../Instructor/js/courses.js";
-
-export function renderSuggestions(courses) {
+export function renderSuggestions(courses, onSelectCourse) {
     const suggestionsBox = document.getElementById("suggestions");
 
     if (!courses.length) {
@@ -20,7 +18,7 @@ export function renderSuggestions(courses) {
     document.querySelectorAll(".suggestion-item").forEach(item => {
         item.addEventListener("click", () => {
             const courseId = item.dataset.id;
-            selectCourseFromSearch(courseId);
+            onSelectCourse(courseId);
         });
     });
 }

@@ -1,7 +1,7 @@
 import bcrypt from "bcryptjs";
 import { findAccountByEmail, findAccountByStudentEmail, createAccount, getNextAccountNumber, updateAccount, findAccountByNumber, UpdatePassword} from "../repository/accountRepository.js";
 import { createLearner, getNextLearnerId } from "../repository/learnerRepository.js";
-import { sendVerificationEmail } from "../utils/emailUtils.js";
+import { sendEmail } from "../utils/emailUtils.js";
 import { saveVerificationCode, generateVerificationCode, validateVerificationCode } from "../utils/verificationCodeUtils.js";
 
 export async function verifyCode(emailAddress, code) {
@@ -42,11 +42,10 @@ export async function register(fullName, emailAddress, password) {
 
     const accountNumber = await getNextAccountNumber()
     const learnerId = await getNextLearnerId()
-    const username = fullName.replace(/\s/g,'')
 
     await createAccount({
         accountNumber,
-        username,
+        emailAddress,
         password: hashPassword,
         role: "Learner",
         status: "Not Verified"
@@ -61,7 +60,7 @@ export async function register(fullName, emailAddress, password) {
 
     const verificationCode = generateVerificationCode();
     saveVerificationCode(emailAddress, verificationCode)
-    await sendVerificationEmail(emailAddress, verificationCode)
+    await sendEmail(emailAddress, "Your Verification Code", `Your six-digit code for registration ${verificationCode}`)
 
     return {
         message:"Verification code sent",

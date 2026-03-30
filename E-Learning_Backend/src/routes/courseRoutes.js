@@ -1,12 +1,17 @@
 import express from "express";
-import { getCoursesByInstructorsController, createCoureController, updateCoureController, getCourseFeedbackController, searchCourseController, getCourseEarningController } from "../controllers/courseController.js";
-
+import { getAllCourseController, getCoursesByInstructorsController, createCoureController, updateCoureController, getCourseFeedbackController, searchCourseController, getCourseEarningController, getCourseByIdController, getCourseEarningDetailsController, getUnansweredQuestionController, answerQuestion } from "../controllers/courseController.js";
+import { verifyToken, authorizeRoles } from "../middlewares/authMiddlewares.js";
 const router = express.Router()
 
-router.get("/instructor/:id/courses", getCoursesByInstructorsController)
-router.post("/courses", createCoureController)
-router.put("/courses/:id", updateCoureController)
-router.get("/courses/:courseId/feedbacks", getCourseFeedbackController)
-router.get("/courses/search", searchCourseController)
-router.get("/courses/:id/earnings", getCourseEarningController)
+router.get("/instructor/:id/courses", verifyToken, getCoursesByInstructorsController)
+router.post("/courses", verifyToken, authorizeRoles("Instructor", "Employee"), createCoureController)
+router.put("/courses/:id", verifyToken, authorizeRoles("Instructor", "Employee"), updateCoureController)
+router.get("/courses/:courseId/feedbacks", verifyToken, authorizeRoles("Instructor", "Employee"), getCourseFeedbackController)
+router.get("/courses/search", verifyToken, searchCourseController)
+router.get("/courses/:id/earnings",verifyToken, authorizeRoles("Instructor"), getCourseEarningController)
+router.get("/courses/:courseId/earning-details", verifyToken, authorizeRoles("Instructor"), getCourseEarningDetailsController);
+router.get("/questions/course/:id/unanswered", verifyToken, authorizeRoles("Instructor"), getUnansweredQuestionController)
+router.get("/courses/:courseId", getCourseByIdController)
+router.get("/courses", verifyToken, authorizeRoles("Employee"), getAllCourseController)
+router.put("/questions/:questionId/answer", verifyToken, authorizeRoles("Instructor"), answerQuestion)
 export default router

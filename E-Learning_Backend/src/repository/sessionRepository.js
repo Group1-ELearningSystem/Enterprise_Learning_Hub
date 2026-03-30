@@ -50,13 +50,29 @@ export async function findLastSessionIdByCourse(courseId) {
 }
 
 export async function deleteSession(courseId, sessionId) {
-    const query = `
-        DELETE FROM Sessions
-        WHERE Session_ID = ?
-        AND Course_ID = ?
-    `
-    await db.execute(query, [sessionId, courseId])
+    const connection = await db.getConnection
 
+    try {
+        await connection.beginTransaction
+
+        await db.execute(`
+            DELETE FROM Sessions_Exercise
+            WHERE Session_ID = ?
+            AND Course_ID = ?
+        `, [sessionId, courseId])
+
+        await db.execute(`
+            DELETE FROM Sessions
+            WHERE Session_ID = ?
+            AND Course_ID = ?
+        `, [sessionId, courseId])
+        await connection.commit()
+    } catch (err) {
+        await connection.rollback()
+        throw err
+    } finally {
+        connection.release()
+    }
 }
 
 export async function updateSession(session, sessionId, courseId) {

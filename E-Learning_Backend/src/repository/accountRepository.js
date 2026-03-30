@@ -72,7 +72,7 @@ export async function createAccount(account){
     `;
     await db.execute(query,[
         account.accountNumber,
-        account.username,
+        account.emailAddress,
         account.password,
         account.role,
         account.status

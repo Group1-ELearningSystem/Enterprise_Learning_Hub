@@ -25,6 +25,13 @@
     </div>
 
     <div class="form-group">
+      <label class="form-label">Course Category</label>
+      <select id="courseField" class="form-control" required>
+        <option value="">-- Select Category --</option>
+      </select>
+    </div>
+
+    <div class="form-group">
       <label class="form-label">Course Objective</label>
       <textarea id="courseObjective" class="form-control" rows="3" placeholder="What will students learn?"
         required></textarea>
@@ -65,7 +72,44 @@
 </div>
 
 <div class="simple-card mt-3">
+  <h4>Course Questions</h4>
+  <div id="questionList"></div>
+  <div id="questionEmpty" style="display:none;">
+    <p>No unanswered questions !!!</p>
+  </div>
+  <div id="questionPagination" class="pagination"></div>
+</div>
+
+<div class="simple-card mt-3">
   <h4>Course Earnings</h4>
   <p><strong>Total Subscribers:</strong> <span id="totalSubscribers">0</span></p>
   <p><strong>Total Earned:</strong> $<span id="totalEarned">0</span></p>
+  <button class="btn btn-primary" id="earningDetail">View Details</button>
+</div>
+
+<div id="earningModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="closeModal">
+            &times;
+        </span>
+
+        <h3>Course Earnings Details</h3>
+
+        <table id="earningTable">
+            <thead>
+                <tr>
+                    <th>Student</th>
+                    <th>Date</th>
+                    <th>Fee</th>
+                    <th>System Fee</th>
+                    <th>Instructor Earn</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+          </table>
+          <div id="earningPagination" class="pagination"></div>
+
+        <table id="earningSummary"></table>
+    </div>
 </div>

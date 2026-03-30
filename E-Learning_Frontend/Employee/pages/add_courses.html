@@ -1,0 +1,91 @@
+<div class="page-header page-header-row">
+    <div>
+        <h2 class="page-heading">
+            <i class="bi bi-person-badge"></i>
+            Add New Course (Employee)
+        </h2>
+        <p class="page-subtitle">
+            Create a course and assign an instructor.
+        </p>
+    </div>
+
+    <button type="button" class="app-btn" id="backToEmployeeCoursesBtn">
+        <i class="bi bi-arrow-left"></i>
+        Back
+    </button>
+
+</div>
+
+<div class="simple-card">
+    <form id="addEmployeeCourseForm">
+        <div class="form-group">
+            <label class="form-label">
+                Course Title
+            </label>
+
+            <input type="text" id="empCourseTitle" class="form-control" placeholder="Example: Java Fundamentals"
+                required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                Assign Instructor
+            </label>
+
+            <div class="search-box">
+                <input type="text" id="instructorSearch" class="form-control" placeholder="Search by name, ID, email or phone">
+                <div id="instructorSuggestions" class="suggestion-box"></div>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                Course Field
+            </label>
+            <select id="empFieldSelect" class="form-control" required>
+                <option value="">
+                    Select Field
+                </option>
+            </select>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                Course Objective
+            </label>
+
+            <textarea id="empCourseObjective" class="form-control" rows="3" required></textarea>
+
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                Course Description
+            </label>
+            <textarea id="empCourseDesc" class="form-control" rows="4" required></textarea>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                Course Price ($)
+            </label>
+            <input type="number" id="empCoursePrice" class="form-control" min="0" step="0.01" required>
+        </div>
+
+        <div class="form-group">
+            <label class="form-label">
+                Course Status
+            </label>
+
+            <select id="empCourseStatus" class="form-control">
+                <option value="Active">Active</option>
+                <option value="Draft">Draft</option>
+            </select>
+        </div>
+
+        <button type="submit" class="app-btn primary w-100">
+            <i class="bi bi-save"></i>
+            Save Course
+        </button>
+    </form>
+</div>
