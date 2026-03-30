@@ -1,127 +1,65 @@
 import db from "../config/db.js";
 
-/**
- * Tìm learner theo account number
- */
-export async function findLearnerByAccountNumber(accountNumber) {
-    const sql = `
-        SELECT 
-            Learner_ID,
-            Learner_Full_Name,
-            Learner_Email_Address,
-            Account_Number
-        FROM Learner
-        WHERE Account_Number = ?
-        LIMIT 1
-    `;
+export const findActiveSubscription = async (learnerId, courseId) => {
+  const [rows] = await db.query(
+    `SELECT * FROM Subscription
+     WHERE Learner_ID = ? AND Course_ID = ? AND Subscription_Status = 'Active'
+     ORDER BY Subscription_ID DESC
+     LIMIT 1`,
+    [learnerId, courseId]
+  );
+  return rows[0] || null;
+};
 
-    const [rows] = await db.execute(sql, [accountNumber]);
-    return rows[0] || null;
-}
+export const findAnySubscription = async (learnerId, courseId) => {
+  const [rows] = await db.query(
+    `SELECT * FROM Subscription
+     WHERE Learner_ID = ? AND Course_ID = ?
+     ORDER BY Subscription_ID DESC
+     LIMIT 1`,
+    [learnerId, courseId]
+  );
+  return rows[0] || null;
+};
 
-/**
- * Lấy subscription theo learner + course
- */
-export async function findSubscriptionByLearnerAndCourse(learnerId, courseId) {
-    const sql = `
-        SELECT 
-            Subscription_ID,
-            Subscription_Status,
-            Learner_ID,
-            Course_ID,
-            Payment_Proof
-        FROM Subscription
-        WHERE Learner_ID = ?
-          AND Course_ID = ?
-        LIMIT 1
-    `;
+export const createSubscription = async ({
+  subscriptionId,
+  status,
+  learnerId,
+  courseId,
+  paymentProof = null
+}) => {
+  await db.query(
+    `INSERT INTO Subscription
+     (Subscription_ID, Subscription_Status, Learner_ID, Course_ID, Payment_Proof, Order_Code, Subscription_Date)
+     VALUES (?, ?, ?, ?, ?, NULL, CURDATE())`,
+    [subscriptionId, status, learnerId, courseId, paymentProof]
+  );
+};
 
-    const [rows] = await db.execute(sql, [learnerId, courseId]);
-    return rows[0] || null;
-}
-
-/**
- * Lấy status subscription theo learner + course
- */
-export async function findSubscriptionStatus(learnerId, courseId) {
-    const sql = `
-        SELECT Subscription_Status
-        FROM Subscription
-        WHERE Learner_ID = ?
-          AND Course_ID = ?
-        LIMIT 1
-    `;
-
-    const [rows] = await db.execute(sql, [learnerId, courseId]);
-    return rows[0]?.Subscription_Status || null;
-}
-
-/**
- * Lấy subscription active id để cho phép learner vào học
- */
-export async function findActiveSubscriptionId(learnerId, courseId) {
-    const sql = `
-        SELECT Subscription_ID
-        FROM Subscription
-        WHERE Learner_ID = ?
-          AND Course_ID = ?
-          AND Subscription_Status = 'Active'
-        LIMIT 1
-    `;
-
-    const [rows] = await db.execute(sql, [learnerId, courseId]);
-    return rows[0]?.Subscription_ID || null;
-}
-
-/**
- * Tạo subscription mới
- */
-export async function insertSubscription(subscription) {
-    const sql = `
-        INSERT INTO Subscription
-        (
-            Subscription_ID,
-            Subscription_Status,
-            Learner_ID,
-            Course_ID,
-            Payment_Proof
-        )
-        VALUES (?, ?, ?, ?, ?)
-    `;
-
-    const [result] = await db.execute(sql, [
-        subscription.subscriptionId,
-        subscription.subscriptionStatus,
-        subscription.learnerId,
-        subscription.courseId,
-        subscription.paymentProof ?? null
-    ]);
-
-    return result;
-}
-
-/**
- * Lấy danh sách khóa học learner đã đăng ký
- */
-export async function findCoursesByLearner(learnerId) {
-    const sql = `
-        SELECT
-            c.Course_ID,
-            c.Course_Name,
-            c.Course_Overview,
-            c.Course_Objective,
-            c.Course_Fee,
-            c.Course_Status,
+export const findMyCoursesByAccountNumber = async (accountNumber) => {
+  const [rows] = await db.query(
+    `SELECT c.Course_ID, c.Course_Name, c.Course_Overview, c.Course_Fee,
+            s.Subscription_ID, s.Subscription_Status, s.Subscription_Date,
             cf.Field_Name,
-            s.Subscription_ID,
-            s.Subscription_Status
-        FROM Subscription s
-        INNER JOIN Courses c ON s.Course_ID = c.Course_ID
-        LEFT JOIN Courses_Fields cf ON c.Course_ID = cf.Course_ID
-        WHERE s.Learner_ID = ?
-        ORDER BY s.Subscription_ID DESC
-    `;
+            i.Instructor_Full_Name
+     FROM Subscription s
+     JOIN Learner l ON l.Learner_ID = s.Learner_ID
+     JOIN Courses c ON c.Course_ID = s.Course_ID
+     LEFT JOIN Courses_Fields cf ON cf.Course_ID = c.Course_ID
+     LEFT JOIN Instructor_Courses ic ON ic.Course_ID = c.Course_ID
+     LEFT JOIN Instructor i ON i.Instructor_ID = ic.Instructor_ID
+     WHERE l.Account_Number = ?
+     ORDER BY s.Subscription_ID DESC`,
+    [accountNumber]
+  );
+  return rows;
+};
 
-    const [rows] = await db.execute(sql, [learnerId]);
-    return rows;
-}
+export const findEnrolledCourseIds = async (learnerId) => {
+  const [rows] = await db.query(
+    `SELECT DISTINCT Course_ID FROM Subscription WHERE Learner_ID = ?`,
+    [learnerId]
+  );
+  return rows;
+};

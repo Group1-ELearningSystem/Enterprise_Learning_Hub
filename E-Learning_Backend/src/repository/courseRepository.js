@@ -286,7 +286,7 @@ export async function updateCourseInformation(course, courseId, fieldName) {
             SET Field_Name = ?
             WHERE Course_ID = ?
         `
-        await connection.execute(fieldQuery,[
+        await db.execute(fieldQuery,[
             fieldName,
             courseId
         ])
