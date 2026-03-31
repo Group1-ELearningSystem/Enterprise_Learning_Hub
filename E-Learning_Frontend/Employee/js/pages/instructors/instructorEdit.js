@@ -29,9 +29,13 @@ export async function LoadInstructorToForm(selectedInstructor) {
     form.addEventListener("submit", async (e) => {
         e.preventDefault()
         const status = document.getElementById("accountStatus").value;
+        const name = document.getElementById("insName").value;
+        const email = document.getElementById("insEmail").value;
+        const phone = document.getElementById("insPhone").value;
+
         try {
             const token = localStorage.getItem("token")
-            await updateInstructor(selectedInstructor.Instructor_ID, status, token)
+            await updateInstructor(selectedInstructor.Instructor_ID, {name, email, phone, status}, token)
             loadPage("instructors")
         } catch (err) {
             console.log(err)

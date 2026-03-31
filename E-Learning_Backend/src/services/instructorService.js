@@ -27,8 +27,8 @@ export async function addInstructorService(data) {
     return result
 }
 
-export async function updateInstructorService(instructorId, status) {
-    await updateInstructor(instructorId, status)
+export async function updateInstructorService(instructorId, data) {
+    await updateInstructor(instructorId, data)
     return {
         message: "Instructor updated successfully"
     }

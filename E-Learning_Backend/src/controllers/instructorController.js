@@ -49,8 +49,9 @@ export async function getAllInstructorController(req, res) {
 export async function updateInstructorController(req, res) {
     try{
         const id = req.params.id
-        const { status } = req.body
-        await updateInstructorService(id, status)
+        const data  = req.body
+        console.log(data)
+        await updateInstructorService(id, data)
         res.json({
             success: true,
             message: "Instructor status updated"
