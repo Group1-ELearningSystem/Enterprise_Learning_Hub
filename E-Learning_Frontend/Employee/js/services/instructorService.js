@@ -63,11 +63,11 @@ export async function addInstructor(data, token) {
     }
 }
 
-export async function updateInstructor(instructorId, status, token) {
+export async function updateInstructor(instructorId, data, token) {
     try {
         const res = await api.put(
             `/instructor/${instructorId}`,
-            { status },
+            data,
             {
                 headers: { Authorization: `Bearer ${token}` }
             }
