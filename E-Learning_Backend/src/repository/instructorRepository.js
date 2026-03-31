@@ -136,16 +136,42 @@ export async function insertInstructor(data) {
     }
 }
 
-export async function updateInstructor(instructorId, status) {
-    const query =
-        `
-        UPDATE Accounts
-        SET Account_Status = ?
-        WHERE Account_Number = (
-            SELECT Account_Number
-            FROM Instructor
+export async function updateInstructor(instructorId, data) {
+    const {name, email, phone, status} = data
+    const connection = await db.getConnection
+    try {
+
+        await connection.beginTransaction
+        await db.execute(
+            `
+            UPDATE Instructor
+            SET 
+                Instructor_Full_Name = ?,
+                Instructor_Email_Address = ?,
+                Instructor_Phone_Number = ?
             WHERE Instructor_ID = ?
-        )
-    `
-    await db.execute(query, [status, instructorId]);
+            `,
+            [name, email, phone, instructorId]
+        );
+
+        await db.execute(
+            `
+            UPDATE Accounts
+            SET Account_Status = ?
+            WHERE Account_Number = (
+                SELECT Account_Number
+                FROM Instructor
+                WHERE Instructor_ID = ?
+            )
+            `,
+            [status, instructorId]
+        );
+
+        await connection.commit
+    } catch (err) {
+        await connection.rollback
+        throw err
+    } finally {
+        connection.release
+    }
 }
